@@ -3,6 +3,8 @@ package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
@@ -11,16 +13,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // mision unica de la pantalla para permitir la navegación
         configurarBotonNavegacion()
+        configurarMenuLateral() // Agregamos esta llamada
+    }
+
+    private fun configurarMenuLateral() {
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
+
+        // Cuando presionas el ícono de hamburguesa, se abre el menú
+        topAppBar.setNavigationOnClickListener {
+            drawerLayout.open()
+        }
     }
 
     private fun configurarBotonNavegacion() {
-        // Encontramos el botón azul de "Registrar"
         val btnIrARegistro = findViewById<MaterialButton>(R.id.btnIrARegistro)
-
         btnIrARegistro.setOnClickListener {
-            // lleva a la pantalla de registro
             val intent = Intent(this, RegistrarProductoActivity::class.java)
             startActivity(intent)
         }
