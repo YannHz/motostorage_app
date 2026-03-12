@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+
 class RegistrarProductoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,21 +36,48 @@ class RegistrarProductoActivity : AppCompatActivity() {
             val modelo = findViewById<TextInputEditText>(R.id.etModelo).text.toString().trim()
             val categoria = findViewById<AutoCompleteTextView>(R.id.autoCompleteCategoria).text.toString()
             val precioStr = findViewById<TextInputEditText>(R.id.etPrecio).text.toString().trim()
+            val descripcion = findViewById<TextInputEditText>(R.id.etDescripcion).text.toString().trim()
+            val stockStr = findViewById<TextInputEditText>(R.id.etStock).text.toString().trim()
+            val stockMinStr = findViewById<TextInputEditText>(R.id.etStockMinimo).text.toString().trim()
+            val codigoBarras = findViewById<TextInputEditText>(R.id.etCodigoBarras).text.toString().trim()
 
             // validacon básica de campos obligatorios
-            if (nombre.isEmpty() || modelo.isEmpty() || precioStr.isEmpty()) {
-                Toast.makeText(this, "por favor llena todos los campos obligatorios (*).", Toast.LENGTH_SHORT).show()
+            if (nombre.isEmpty() || modelo.isEmpty() || precioStr.isEmpty() || stockStr.isEmpty()) {
+                Toast.makeText(this, "Por favor llena todos los campos obligatorios (*).", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val precio = precioStr.toDoubleOrNull() ?: 0.0
+            val stock = stockStr.toIntOrNull() ?: 0
+            val stockMin = stockMinStr.toIntOrNull() ?: 0
+
+            // val nuevoProducto = Producto(nombre, modelo, categoria, precio)
+            val nuevoProducto = Producto(
+                nombre = nombre,
+                modelo = modelo,
+                categoria = categoria,
+                descripcion = descripcion,
+                precio = precio,
+                stock = stock,
+                stockMinimo = stockMin,
+                codigoBarras = codigoBarras
+            )
 
             // aqui es donde el producto está listo para enviarse a la base de datos
 
-            // val nuevoProducto = Producto(nombre, modelo, categoria, precio)
+            lifecycleScope.launch {
+                val database = AppDatabase.getDatabase(this@RegistrarProductoActivity)
+                database.productoDao().insertarProducto(nuevoProducto)
 
-            Toast.makeText(this, "Producto registrado correctamente.", Toast.LENGTH_SHORT).show()
-            finish()
+                runOnUiThread {
+                    Toast.makeText(
+                        this@RegistrarProductoActivity,
+                        "¡$nombre guardado en MotoStore!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish() // Cierra la pantalla al terminar
+                }
+            }
         }
     }
 }
