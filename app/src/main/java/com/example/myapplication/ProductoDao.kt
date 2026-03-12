@@ -14,9 +14,9 @@ interface ProductoDao{
     suspend fun insertarProducto( producto: Producto)
     //Obtener productos del mas nuevo al mas viejo
     @Query("SELECT * FROM productos ORDER BY id DESC")
-    suspend fun getAllProductos(): LiveData<List<Producto>>
+    suspend fun getAllProductos(): List<Producto>
 
-    @Query("SELECT * FROM productos WHERE codigoBarras = :codigo LIMIT1")
+    @Query("SELECT * FROM productos WHERE codigoBarras = :codigo LIMIT 1")
     suspend fun getByCodigo(codigo: String): Producto?
 
     @Update
