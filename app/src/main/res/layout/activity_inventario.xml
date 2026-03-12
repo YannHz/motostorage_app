@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/moto_dark_bg"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarInventario"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/moto_dark_bg"
+        app:title="Inventario MotoStore"
+        app:titleTextColor="#FFFFFF"
+        app:navigationIcon="@drawable/ic_menu_sort_by_size" />
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/svBuscador"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_edittext"
+        app:iconifiedByDefault="false"
+        app:queryHint="Buscar producto..."
+        app:searchIcon="@drawable/ic_menu_sort_by_size" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvInventario"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+
+</LinearLayout>

@@ -33,5 +33,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, RegistrarProductoActivity::class.java)
             startActivity(intent)
         }
+        val btnBuscar = findViewById<MaterialButton>(R.id.btnBuscar)
+        btnBuscar.setOnClickListener {
+            val intent = Intent(this, InventarioActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
