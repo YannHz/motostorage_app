@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="moto_blue">#5C85FF</color>
+    <color name="moto_dark_bg">#050505</color>
+    <color name="moto_surface">#121212</color>
+    <color name="moto_red">#FF4D4D</color>
+    <color name="moto_green">#4CAF50</color>
+</resources>
