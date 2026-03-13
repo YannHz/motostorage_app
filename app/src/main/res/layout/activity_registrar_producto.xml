@@ -214,5 +214,14 @@
             app:backgroundTint="@color/blue"
             app:icon="@drawable/ic_check"
             app:iconTint="#FFFFFF"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEliminarProducto"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:text="Eliminar Producto"
+            android:textColor="#FF5252"
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

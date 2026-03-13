@@ -60,7 +60,7 @@
             android:id="@+id/btnExportar"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="48dp"
             android:text="Exportar"
             android:textColor="@color/blue"
             android:textSize="12sp"

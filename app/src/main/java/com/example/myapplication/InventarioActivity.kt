@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.widget.TextView
@@ -30,10 +31,23 @@ class InventarioActivity : BaseActivity() {
         configurarBuscador()
         configurarExportar()
         observarProductos()
+
+        val activarBuscador = intent.getBooleanExtra("ACTIVAR_BUSCADOR", false)
+        if (activarBuscador) {
+            val etBuscar = findViewById<TextInputEditText>(R.id.etBuscar)
+            etBuscar?.requestFocus()
+        }
+
     }
 
     private fun configurarRecycler() {
-        adapter = ProductoAdapter(emptyList())
+        adapter = ProductoAdapter(emptyList()) { producto ->
+            val intent = Intent(this, RegistrarProductoActivity::class.java).apply {
+                putExtra("PRODUCTO_ID", producto.id)
+                putExtra("MODO_EDICION", true)
+            }
+            startActivity(intent)
+        }
         findViewById<RecyclerView>(R.id.recyclerInventario).apply {
             layoutManager = LinearLayoutManager(this@InventarioActivity)
             adapter = this@InventarioActivity.adapter
@@ -57,7 +71,7 @@ class InventarioActivity : BaseActivity() {
                 val filtrada = listaCompleta.filter {
                     it.nombreProducto.lowercase().contains(query) ||
                             it.modelo.lowercase().contains(query) ||
-                            it.codigoBarrasQr.lowercase().contains(query)
+                            (it.codigoBarrasQr.lowercase().contains(query) ?: false)
                 }
                 adapter.actualizarLista(filtrada)
                 actualizarContador(filtrada.size)

@@ -15,6 +15,8 @@ import com.example.myapplication.viewmodel.ProductoViewModel
 
 class RegistrarProductoActivity : AppCompatActivity() {
 
+    private var modoEdicion = false
+    private var productoId: Int = 0
     private lateinit var productoViewModel: ProductoViewModel
 
     // scanner ZXING
@@ -32,9 +34,47 @@ class RegistrarProductoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_registrar_producto)
         productoViewModel = ViewModelProvider(this)[ProductoViewModel::class.java]
 
+        productoId = intent.getIntExtra("PRODUCTO_ID", 0)
+        modoEdicion = intent.getBooleanExtra("MODO_EDICION", false)
+
         configurarDropdown()
         configurarBotonEscanear()
         configurarBotonGuardar()
+
+        if (modoEdicion) {
+            cargarDatosProducto(productoId)
+            findViewById<MaterialButton>(R.id.btnRegistrarProducto).text = "Actualizar Producto"
+
+            val btnEliminar = findViewById<MaterialButton>(R.id.btnEliminarProducto)
+            btnEliminar.visibility = android.view.View.VISIBLE
+            btnEliminar.setOnClickListener {
+                mostrarConfirmacion()
+            }
+        }
+    }
+
+    private fun mostrarConfirmacion() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("¿Eliminar producto?")
+            .setMessage("Se eliminara para siempre. ¿Desea borrar del inventario?")
+            .setPositiveButton("Eliminar") { _, _ ->
+                confirmarEliminacion()
+            }
+            .setNegativeButton("Cancelar",null)
+            .show()
+    }
+
+    private fun confirmarEliminacion() {
+        val productoAEliminar = ProductoEntity(
+            id = productoId,
+            nombreProducto = "", modelo = "", categoria = "",
+            descripcion = "", precio = 0.0, stock = 0,
+            stockMinimo = 0, codigoBarrasQr = ""
+        )
+
+        productoViewModel.eliminar(productoAEliminar)
+        Toast.makeText(this,"Producto eliminado", Toast.LENGTH_SHORT).show()
+        finish()
     }
 
     private fun configurarDropdown() {
@@ -80,7 +120,9 @@ class RegistrarProductoActivity : AppCompatActivity() {
             val precio = precioStr.toDoubleOrNull() ?: 0.0
             val stock = stockStr.toIntOrNull() ?: 0
             val stockMinimo = stockMinimoStr.toIntOrNull() ?: 0
-            val nuevoProducto = ProductoEntity(
+
+            val producto = ProductoEntity(
+                id = if (modoEdicion) productoId else 0,
                 nombreProducto = nombre,
                 modelo = modelo,
                 categoria = categoria,
@@ -91,11 +133,31 @@ class RegistrarProductoActivity : AppCompatActivity() {
                 codigoBarrasQr = codigo
             )
 
-            //guardar en la BD
-            productoViewModel.insertar(nuevoProducto)
+            if (modoEdicion) {
+                productoViewModel.actualizar(producto)
+                Toast.makeText(this, "Producto actualizado correctamente.", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                //guardar en la BD
+                productoViewModel.insertar(producto)
+                Toast.makeText(this, "Producto registrado correctamente.", Toast.LENGTH_SHORT).show()
+                limpiarFormulario()
+            }
+        }
+    }
 
-            Toast.makeText(this, "Producto registrado correctamente.", Toast.LENGTH_SHORT).show()
-            limpiarFormulario()
+    private fun cargarDatosProducto(id: Int) {
+        productoViewModel.obtenerProductoPorId(id).observe(this) { producto ->
+            producto?.let {
+                findViewById<TextInputEditText>(R.id.etNombre).setText(it.nombreProducto)
+                findViewById<TextInputEditText>(R.id.etModelo).setText(it.modelo)
+                findViewById<AutoCompleteTextView>(R.id.autoCompleteCategoria).setText(it.categoria, false)
+                findViewById<TextInputEditText>(R.id.etDescripcion).setText(it.descripcion)
+                findViewById<TextInputEditText>(R.id.etPrecio).setText(it.precio.toString())
+                findViewById<TextInputEditText>(R.id.etStock).setText(it.stock.toString())
+                findViewById<TextInputEditText>(R.id.etStockMinimo).setText(it.stockMinimo.toString())
+                findViewById<TextInputEditText>(R.id.etCodigoBarras).setText(it.codigoBarrasQr)
+            }
         }
     }
 

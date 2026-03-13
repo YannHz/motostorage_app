@@ -15,6 +15,9 @@ interface ProductoDao {
     suspend fun registrarProducto(producto: ProductoEntity)
     @Query("SELECT * FROM productos ORDER BY nombreProducto ASC")
     fun obtenerTodosLosProductos(): LiveData<List<ProductoEntity>>
+
+    @Query("SELECT * FROM productos WHERE id = :id LIMIT 1")
+    fun obtenerProductoPorId(id: Int): LiveData<ProductoEntity>
     @Query("SELECT * FROM productos WHERE codigoBarrasQr = :codigo LIMIT 1")
     suspend fun buscarPorCodigo(codigo: String): ProductoEntity?
     @Update
