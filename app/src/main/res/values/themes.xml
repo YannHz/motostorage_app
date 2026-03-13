@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Motostorage_app" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+    <style name="Theme.Motostorage_app" parent="Base.Theme.Motostorage_app">
+        <item name="android:statusBarColor">@color/dark_bg</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+</resources>
