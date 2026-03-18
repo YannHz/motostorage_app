@@ -33,6 +33,13 @@ class MainActivity : BaseActivity() {
 
     private fun configurarDashboard() {
         findViewById<TextView>(R.id.tvSaludo)?.text = "Hola,\n$nombreUsuario"
+
+        val btnBuscar = findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBuscar)
+        btnBuscar?.setOnClickListener {
+            val intent = Intent(this, InventarioActivity:: class.java)
+            intent.putExtra("ACTIVAR_BUSCADOR", true)
+            startActivity(intent)
+        }
     }
 
     private fun observarDatos() {
@@ -84,13 +91,15 @@ class MainActivity : BaseActivity() {
         val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
         val navigationView = findViewById<NavigationView>(R.id.navigation_view)
 
-        topAppBar.setNavigationOnClickListener { drawerLayout.open() }
+        topAppBar.setNavigationOnClickListener {
+            drawerLayout.openDrawer(androidx.core.view.GravityCompat.START)
+        }
 
         val headerView = navigationView.getHeaderView(0)
         headerView.findViewById<TextView>(R.id.tvNombreHeader)?.text = nombreUsuario
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            drawerLayout.close()
+            drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START)
             when (menuItem.itemId) {
                 R.id.nav_dashboard -> { }
                 R.id.nav_inventario -> startActivity(

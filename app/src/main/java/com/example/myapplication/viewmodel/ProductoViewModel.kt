@@ -42,4 +42,7 @@ class ProductoViewModel(application: Application) : AndroidViewModel(application
     suspend fun buscarPorCodigo(codigo: String): ProductoEntity? {
         return repository.buscarPorCodigo(codigo)
     }
+    fun obtenerProductoPorId(id: Int): LiveData<ProductoEntity> {
+        return repository.obtenerProductoPorId(id)
+    }
 }

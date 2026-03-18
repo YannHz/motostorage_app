@@ -25,4 +25,7 @@ class ProductoRepository(private val productoDao: ProductoDao) {
     suspend fun buscarPorCodigo(codigo: String): ProductoEntity? {
         return productoDao.buscarPorCodigo(codigo)
     }
+    fun obtenerProductoPorId(id: Int): LiveData<ProductoEntity> {
+        return productoDao.obtenerProductoPorId(id)
+    }
 }

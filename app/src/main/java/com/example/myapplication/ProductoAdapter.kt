@@ -7,7 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ProductoAdapter(
-    private var productos: List<ProductoEntity>
+    private var productos: List<ProductoEntity>,
+    private val onItemClick: (ProductoEntity) -> Unit
 ) : RecyclerView.Adapter<ProductoAdapter.ProductoViewHolder>() {
 
     class ProductoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -30,6 +31,9 @@ class ProductoAdapter(
         holder.tvPrecio.text = "S/.${String.format("%,.0f", producto.precio)}"
         holder.tvStock.text = "  Stock: ${producto.stock}"
 
+        holder.itemView.setOnClickListener {
+            onItemClick(producto)
+        }
         // Si el stock está bajo el mínimo, mostrar en rojo
         if (producto.stock <= producto.stockMinimo) {
             holder.tvStock.setTextColor(
